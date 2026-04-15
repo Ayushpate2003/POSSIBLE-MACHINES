@@ -25,6 +25,8 @@ import {
 } from "lucide-react";
 import { products, categories, automationFilters, type Product } from "@/data/products";
 import { Button } from "@/components/ui/Button";
+import GlobalNetwork from "@/components/global-network";
+import { AdvancedSpecs } from "@/components/advanced-specs";
 
 // --- Animation Constants ---
 const EASE_EXPO = [0.16, 1, 0.3, 1] as const;
@@ -45,7 +47,7 @@ const staggerContainer = {
 
 // --- Components ---
 
-const Navbar = () => {
+const Navbar = ({ onQuote }: { onQuote: () => void }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -92,7 +94,12 @@ const Navbar = () => {
           </div>
 
           <div className="hidden md:flex items-center gap-4">
-            <Button variant="secondary" size="sm" className="bg-pm-dark text-white hover:bg-pm-mid border-none shadow-lg">
+            <Button 
+              variant="secondary" 
+              size="sm" 
+              className="bg-pm-dark text-white hover:bg-pm-mid border-none shadow-lg"
+              onClick={onQuote}
+            >
               Get Quote
             </Button>
             <a
@@ -125,27 +132,36 @@ const Navbar = () => {
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
             className="fixed inset-0 z-[110] bg-white flex flex-col md:hidden"
           >
-            <div className="p-6 flex items-center justify-between border-b border-pm-dark/5">
+            <div className="p-6 flex items-center justify-between border-b border-pm-dark/5 bg-white sticky top-0 z-20">
               <div className="flex items-center gap-2">
                 <div className="w-9 h-9 bg-white rounded-xl flex items-center justify-center p-1 shadow-lg border border-pm-dark/5">
                   <img src="/logo.png" alt="Logo" className="w-full h-full object-contain" />
                 </div>
-                <span className="font-heading font-black text-pm-dark">POSSIBLE</span>
+                <div className="flex flex-col">
+                  <span className="font-heading font-black text-pm-dark leading-none">POSSIBLE</span>
+                  <span className="font-heading text-[10px] font-bold text-pm-mid tracking-widest uppercase">Machines</span>
+                  <span className="text-[8px] text-pm-fg-subtle font-medium mt-0.5 whitespace-nowrap">Industrial Automation Excellence</span>
+                </div>
               </div>
               <button onClick={() => setIsOpen(false)} className="w-10 h-10 flex items-center justify-center rounded-full bg-pm-dark/5">
                 <X className="w-6 h-6 text-pm-dark" />
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto px-6 py-10 flex flex-col gap-8">
+            <div className="flex-1 overflow-y-auto px-6 py-6 flex flex-col gap-2">
               {["Home", "Machines", "Technology", "About", "Reviews"].map((item, i) => (
                 <motion.a
                   key={item}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.1 + i * 0.05 }}
                   href={`#${item.toLowerCase()}`}
-                  className="font-heading text-4xl font-black text-pm-dark/90 hover:text-pm-lime transition-colors"
+                  className={`
+                    px-4 py-3 rounded-xl font-heading text-lg font-semibold transition-all
+                    ${item === "Home" 
+                      ? "bg-pm-lime/10 text-pm-mid" 
+                      : "text-pm-dark/70 hover:bg-pm-dark/5 hover:text-pm-dark"}
+                  `}
                   onClick={() => setIsOpen(false)}
                 >
                   {item}
@@ -153,13 +169,18 @@ const Navbar = () => {
               ))}
             </div>
 
-            <div className="p-6 border-t border-pm-dark/5 bg-pm-dark/5 flex flex-col gap-4">
-              <Button className="w-full h-14 bg-pm-dark text-white rounded-2xl text-lg font-bold">Request Priority Quote</Button>
+            <div className="p-6 pb-12 border-t border-pm-dark/5 bg-pm-dark/5 flex flex-col gap-4">
+              <Button 
+                className="w-full h-14 bg-pm-dark text-white rounded-2xl text-lg font-bold shadow-xl shadow-pm-dark/10"
+                onClick={onQuote}
+              >
+                Request Priority Quote
+              </Button>
               <div className="flex gap-4">
-                <a href="tel:08047549587" className="flex-1 h-14 bg-white border border-pm-dark/10 rounded-2xl flex items-center justify-center gap-2 font-bold text-pm-dark">
+                <a href="tel:08047549587" className="flex-1 h-14 bg-white border border-pm-dark/10 rounded-2xl flex items-center justify-center gap-2 font-black text-pm-dark shadow-sm">
                   <Phone className="w-5 h-5 text-pm-lime" /> Call
                 </a>
-                <a href="https://wa.me/918047549587" className="flex-1 h-14 bg-pm-lime text-pm-dark rounded-2xl flex items-center justify-center gap-2 font-bold">
+                <a href="https://wa.me/918047549587" className="flex-1 h-14 bg-pm-lime text-pm-dark rounded-2xl flex items-center justify-center gap-2 font-black shadow-lg shadow-pm-lime/20">
                   <MessageCircle className="w-5 h-5" /> WhatsApp
                 </a>
               </div>
@@ -171,7 +192,7 @@ const Navbar = () => {
   );
 };
 
-const Hero = () => {
+const Hero = ({ onQuote }: { onQuote: () => void }) => {
   const { scrollY } = useScroll();
   const y1 = useTransform(scrollY, [0, 500], [0, 200]);
   const opacity = useTransform(scrollY, [0, 400], [1, 0]);
@@ -180,17 +201,26 @@ const Hero = () => {
     <section id="home" className="relative min-h-screen flex items-center overflow-hidden py-24 md:py-0">
       {/* Background with 3D-like industrial render placeholder */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-r from-white via-white/80 to-transparent z-10" />
-        <motion.div style={{ y: y1 }} className="absolute inset-0 w-full h-[120%]">
-          <img
-            src="https://images.unsplash.com/photo-1541933540445-5d9f000c0aa4?q=80&w=2000&auto=format&fit=crop"
-            alt="Factory"
-            className="w-full h-full object-cover grayscale-[0.2] brightness-[0.9]"
+        {/* Cinematic Video Background */}
+        <div className="absolute inset-0 z-0">
+          <video
+            src="/3d-video.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="w-full h-full object-cover grayscale-[0.3] brightness-[0.8]"
           />
-        </motion.div>
-        {/* Animated accent blobs */}
-        <div className="absolute top-1/4 right-1/4 w-[500px] h-[500px] bg-pm-lime/20 blur-[120px] rounded-full animate-blob-1" />
-        <div className="absolute bottom-1/4 left-1/3 w-[400px] h-[400px] bg-pm-dark/5 blur-[100px] rounded-full animate-blob-2" />
+        </div>
+
+        {/* Visibility Gradient Layer */}
+        <div className="absolute inset-0 bg-gradient-to-r from-white via-white/80 to-transparent z-10" />
+        {/* Subtle Bottom Fade */}
+        <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent z-10" />
+        
+        {/* Animated accent blobs - moved below visibility layer */}
+        <div className="absolute top-1/4 right-1/4 w-[500px] h-[500px] bg-pm-lime/20 blur-[120px] rounded-full animate-blob-1 z-0" />
+        <div className="absolute bottom-1/4 left-1/3 w-[400px] h-[400px] bg-pm-dark/5 blur-[100px] rounded-full animate-blob-2 z-0" />
       </div>
 
       <div className="max-w-7xl mx-auto px-6 w-full relative z-20 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -210,7 +240,10 @@ const Hero = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 mb-12 lg:mb-0">
-            <Button className="h-14 md:h-16 px-10 bg-pm-dark text-white text-base md:text-lg font-bold rounded-2xl group shadow-lg md:shadow-2xl shadow-pm-dark/20 hover:bg-pm-mid transition-all">
+            <Button 
+              className="h-14 md:h-16 px-10 bg-pm-dark text-white text-base md:text-lg font-bold rounded-2xl group shadow-lg md:shadow-2xl shadow-pm-dark/20 hover:bg-pm-mid transition-all"
+              onClick={onQuote}
+            >
               Get Instant Quote
               <ArrowUpRight className="ml-2 w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
             </Button>
@@ -240,24 +273,7 @@ const Hero = () => {
           </div>
         </motion.div>
 
-        {/* Industrial Render - Now visible on all devices with responsive order */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8, x: 50 }}
-          animate={{ opacity: 1, scale: 1, x: 0 }}
-          transition={{ duration: 1, delay: 0.2, ease: EASE_EXPO }}
-          className="relative block mt-12 lg:mt-0"
-        >
-          <div className="relative z-10 animate-blob-1">
-             <img 
-               src="/hero-industrial.png" 
-               alt="Industrial Plant" 
-               className="w-full h-auto drop-shadow-[0_20px_40px_rgba(26,61,47,0.2)] md:drop-shadow-[0_35px_60px_rgba(26,61,47,0.3)] transition-transform hover:scale-105 duration-700"
-             />
-          </div>
-          {/* Decorative halo */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-pm-lime/10 blur-[60px] md:blur-[100px] rounded-full -z-10" />
-        </motion.div>
-      </div>
+        </div>
 
       {/* Desktop Trust metric summary - hidden on mobile to prevent overlap */}
       <div className="absolute bottom-12 right-0 left-0 hidden md:block">
@@ -320,6 +336,33 @@ const TrustBar = () => {
           </div>
         </div>
       </div>
+    </div>
+  );
+};
+
+const ClientLogos = () => {
+  return (
+    <div className="bg-white py-12 border-b border-pm-dark/5 overflow-hidden">
+       <div className="max-w-7xl mx-auto px-6 mb-8 text-center text-pm-fg-subtle">
+          <span className="text-[10px] font-black tracking-widest uppercase">Trusted by 1000+ Industrial Partners</span>
+       </div>
+       <div className="relative flex overflow-hidden">
+          <div className="flex gap-16 animate-ticker hover:[animation-play-state:paused] py-4 whitespace-nowrap">
+             {[...Array(2)].map((_, i) => (
+               <React.Fragment key={i}>
+                 {[
+                   "UltraTech", "Ambuja Cement", "JK Cement", "ACC", "Binani", "Shree Cement",
+                   "Dalmia Bharat", "Prism Johnson", "Ramco", "Wonder Cement"
+                 ].map(client => (
+                   <div key={client} className="flex items-center gap-2 grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-500 cursor-default">
+                      <div className="w-8 h-8 rounded bg-pm-dark flex items-center justify-center text-[8px] font-black text-pm-lime">PM</div>
+                      <span className="text-xl font-heading font-black text-pm-dark leading-none">{client}</span>
+                   </div>
+                 ))}
+               </React.Fragment>
+             ))}
+          </div>
+       </div>
     </div>
   );
 };
@@ -392,7 +435,7 @@ const About = () => {
   );
 };
 
-const ProductShowcase = () => {
+const ProductShowcase = ({ onQuote }: { onQuote: () => void }) => {
   const [activeTab, setActiveTab] = useState<typeof categories[number]["id"]>("all");
   const [activeAutomation, setActiveAutomation] = useState<typeof automationFilters[number]["id"]>("all");
 
@@ -490,7 +533,14 @@ const ProductShowcase = () => {
 
                     <div className="pt-6 border-t border-pm-dark/5 flex items-center justify-between">
                        <span className="font-heading font-black text-pm-dark">{p.price}</span>
-                       <Button variant="secondary" size="sm" className="bg-pm-dark text-white text-[10px] font-bold h-9">Get Quote</Button>
+                       <Button 
+                        variant="secondary" 
+                        size="sm" 
+                        className="bg-pm-dark text-white text-[10px] font-bold h-9"
+                        onClick={onQuote}
+                       >
+                         Get Quote
+                       </Button>
                     </div>
                   </div>
                 </div>
@@ -857,26 +907,103 @@ const Footer = () => {
 
 // --- Main Page Assembly ---
 export default function Home() {
+  const [isQuoteOpen, setIsQuoteOpen] = useState(false);
+
   return (
     <main className="min-h-screen">
-      <Navbar />
-      <Hero />
+      <Navbar onQuote={() => setIsQuoteOpen(true)} />
+      <Hero onQuote={() => setIsQuoteOpen(true)} />
       <TrustBar />
+      <ClientLogos />
       <About />
-      <ProductShowcase />
+      <ProductShowcase onQuote={() => setIsQuoteOpen(true)} />
       <WhyChooseUs />
+      <GlobalNetwork />
+      <AdvancedSpecs onQuote={() => setIsQuoteOpen(true)} />
       <VideoSection />
       <Testimonials />
       <ContactForm />
       <Footer />
 
-      {/* Floating WhatsApp with Pulse */}
-      <a href="https://wa.me/918047549587" target="_blank" className="whatsapp-float group">
-         <div className="ring" />
-         <div className="relative w-16 h-16 bg-pm-lime rounded-full shadow-2xl flex items-center justify-center text-pm-dark group-hover:scale-110 transition-transform cursor-pointer">
+      {/* Floating Lead Capture Group */}
+      <div className="fixed bottom-6 right-6 z-[90] flex flex-col gap-4">
+        {/* Call Button */}
+        <motion.a 
+          href="tel:08047549587"
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 1, scale: 1 }}
+          whileHover={{ scale: 1.1 }}
+          className="w-14 h-14 bg-pm-dark text-pm-lime rounded-full shadow-2xl flex items-center justify-center hover:bg-pm-mid transition-all"
+        >
+          <Phone size={24} />
+        </motion.a>
+
+        {/* WhatsApp Button */}
+        <a href="https://wa.me/918047549587" target="_blank" className="whatsapp-float group relative">
+          <div className="ring" />
+          <div className="relative w-16 h-16 bg-pm-lime rounded-full shadow-2xl flex items-center justify-center text-pm-dark group-hover:scale-110 transition-transform cursor-pointer">
             <MessageCircle size={32} />
-         </div>
-      </a>
+          </div>
+        </a>
+      </div>
+
+      {/* Premium Quote Modal */}
+      <AnimatePresence>
+        {isQuoteOpen && (
+          <div className="fixed inset-0 z-[1000] flex items-center justify-center p-6">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsQuoteOpen(false)}
+              className="absolute inset-0 bg-pm-dark/80 backdrop-blur-md"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="relative w-full max-w-xl bg-white rounded-[40px] overflow-hidden shadow-2xl shadow-black/50"
+            >
+              <div className="p-8 md:p-12">
+                <button 
+                  onClick={() => setIsQuoteOpen(false)}
+                  className="absolute top-8 right-8 w-10 h-10 rounded-full bg-pm-dark/5 flex items-center justify-center hover:bg-pm-dark/10 transition-colors"
+                >
+                  <X size={20} className="text-pm-dark" />
+                </button>
+
+                <span className="text-pm-lime font-black tracking-[0.3em] uppercase text-[10px] mb-4 block">Priority Access</span>
+                <h3 className="text-4xl font-black text-pm-dark mb-6 leading-none">Get Your <span className="text-pm-lime">Selection.</span></h3>
+                <p className="text-pm-fg-muted font-medium mb-10">Our engineers will provide a technical quote and layout within 4 business hours.</p>
+
+                <form className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                       <label className="text-[10px] font-black uppercase tracking-widest text-pm-dark/40">Full Name</label>
+                       <input type="text" placeholder="Engineering Head" className="w-full bg-pm-dark/5 rounded-2xl p-4 font-bold outline-none focus:ring-2 focus:ring-pm-lime transition-all" />
+                    </div>
+                    <div className="space-y-2">
+                       <label className="text-[10px] font-black uppercase tracking-widest text-pm-dark/40">Mobile</label>
+                       <input type="tel" placeholder="+91" className="w-full bg-pm-dark/5 rounded-2xl p-4 font-bold outline-none focus:ring-2 focus:ring-pm-lime transition-all" />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-pm-dark/40">Daily Capacity Needs</label>
+                    <select className="w-full bg-pm-dark/5 rounded-2xl p-4 font-bold outline-none focus:ring-2 focus:ring-pm-lime transition-all appearance-none">
+                       <option>5,000 - 10,000 Bricks</option>
+                       <option>10,000 - 20,000 Bricks</option>
+                       <option>20,000+ Bricks (Industrial)</option>
+                    </select>
+                  </div>
+                  <Button className="w-full h-16 bg-pm-dark text-white rounded-2xl font-black text-lg hover:bg-pm-mid transition-all shadow-xl">
+                    Generate Technical Quote
+                  </Button>
+                </form>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </main>
   );
 }
