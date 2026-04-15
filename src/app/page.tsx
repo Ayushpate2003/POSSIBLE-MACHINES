@@ -27,7 +27,7 @@ import { products, categories, automationFilters, type Product } from "@/data/pr
 import { Button } from "@/components/ui/Button";
 
 // --- Animation Constants ---
-const EASE_EXPO = [0.16, 1, 0.3, 1];
+const EASE_EXPO = [0.16, 1, 0.3, 1] as const;
 
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
@@ -56,94 +56,118 @@ const Navbar = () => {
   }, []);
 
   return (
-    <nav
-      className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ${
-        isScrolled ? "py-3 bg-white/90 backdrop-blur-xl border-b border-pm-dark/10 shadow-sm" : "py-6 bg-transparent"
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center p-1 shadow-lg shadow-pm-dark/10">
-            <img src="/logo.png" alt="Logo" className="w-full h-full object-contain" />
+    <>
+      <nav
+        className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ${
+          isScrolled ? "py-3 bg-white/95 backdrop-blur-xl border-b border-pm-dark/10 shadow-sm" : "py-4 md:py-6 bg-transparent"
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-9 h-9 md:w-10 md:h-10 bg-white rounded-xl flex items-center justify-center p-1 shadow-lg shadow-pm-dark/10 transition-transform hover:rotate-12">
+              <img src="/logo.png" alt="Logo" className="w-full h-full object-contain" />
+            </div>
+            <div className="flex flex-col">
+              <span className={`font-heading font-extrabold text-base md:text-lg leading-none tracking-tight text-pm-dark`}>
+                POSSIBLE
+              </span>
+              <span className={`font-heading text-[10px] md:text-xs font-medium tracking-[0.2em] text-pm-mid`}>
+                MACHINES
+              </span>
+            </div>
           </div>
-          <div className="flex flex-col">
-            <span className={`font-heading font-extrabold text-lg leading-none tracking-tight ${isScrolled ? "text-pm-dark" : "text-pm-dark"}`}>
-              POSSIBLE
-            </span>
-            <span className={`font-heading text-xs font-medium tracking-[0.2em] ${isScrolled ? "text-pm-mid" : "text-pm-mid"}`}>
-              MACHINES
-            </span>
-          </div>
-        </div>
 
-        {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-8">
-          {["Home", "Machines", "Technology", "About", "Reviews"].map((item) => (
+          {/* Desktop Nav */}
+          <div className="hidden md:flex items-center gap-8">
+            {["Home", "Machines", "Technology", "About", "Reviews"].map((item) => (
+              <a
+                key={item}
+                href={`#${item.toLowerCase()}`}
+                className="font-body text-sm font-medium text-pm-dark/80 hover:text-pm-lime transition-colors relative group"
+              >
+                {item}
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-pm-lime transition-all group-hover:w-full" />
+              </a>
+            ))}
+          </div>
+
+          <div className="hidden md:flex items-center gap-4">
+            <Button variant="secondary" size="sm" className="bg-pm-dark text-white hover:bg-pm-mid border-none shadow-lg">
+              Get Quote
+            </Button>
             <a
-              key={item}
-              href={`#${item.toLowerCase()}`}
-              className="font-body text-sm font-medium text-pm-dark/80 hover:text-pm-lime transition-colors"
+              href="https://wa.me/918047549587"
+              target="_blank"
+              className="w-10 h-10 rounded-full bg-pm-lime flex items-center justify-center text-pm-dark shadow-lg shadow-pm-lime/20 hover:scale-110 transition-transform"
             >
-              {item}
+              <MessageCircle className="w-5 h-5" />
             </a>
-          ))}
-        </div>
+          </div>
 
-        <div className="hidden md:flex items-center gap-4">
-          <Button variant="secondary" size="sm" className="bg-pm-dark text-white hover:bg-pm-mid border-none shadow-lg">
-            Get Quote
-          </Button>
-          <a
-            href="https://wa.me/918047549587"
-            target="_blank"
-            className="w-10 h-10 rounded-full bg-pm-lime flex items-center justify-center text-pm-dark shadow-lg shadow-pm-lime/20 hover:scale-110 transition-transform"
+          {/* Mobile Toggle */}
+          <motion.button 
+            whileTap={{ scale: 0.9 }}
+            className="md:hidden w-10 h-10 flex items-center justify-center text-pm-dark bg-white/50 backdrop-blur-md rounded-lg" 
+            onClick={() => setIsOpen(true)}
           >
-            <MessageCircle className="w-5 h-5" />
-          </a>
+            <Menu className="w-6 h-6" />
+          </motion.button>
         </div>
+      </nav>
 
-        {/* Mobile Toggle */}
-        <button className="md:hidden text-pm-dark" onClick={() => setIsOpen(!isOpen)}>
-          {isOpen ? <X /> : <Menu />}
-        </button>
-      </div>
-
-      {/* Mobile Menu */}
+      {/* Full Screen Mobile Menu Overlay */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-white border-b border-pm-dark/10 overflow-hidden"
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+            className="fixed inset-0 z-[110] bg-white flex flex-col md:hidden"
           >
-            <div className="px-6 py-8 flex flex-col gap-6">
-              {["Home", "Machines", "Technology", "About", "Reviews"].map((item) => (
-                <a
+            <div className="p-6 flex items-center justify-between border-b border-pm-dark/5">
+              <div className="flex items-center gap-2">
+                <div className="w-9 h-9 bg-white rounded-xl flex items-center justify-center p-1 shadow-lg border border-pm-dark/5">
+                  <img src="/logo.png" alt="Logo" className="w-full h-full object-contain" />
+                </div>
+                <span className="font-heading font-black text-pm-dark">POSSIBLE</span>
+              </div>
+              <button onClick={() => setIsOpen(false)} className="w-10 h-10 flex items-center justify-center rounded-full bg-pm-dark/5">
+                <X className="w-6 h-6 text-pm-dark" />
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto px-6 py-10 flex flex-col gap-8">
+              {["Home", "Machines", "Technology", "About", "Reviews"].map((item, i) => (
+                <motion.a
                   key={item}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.1 + i * 0.05 }}
                   href={`#${item.toLowerCase()}`}
-                  className="font-heading text-xl font-semibold text-pm-dark"
+                  className="font-heading text-4xl font-black text-pm-dark/90 hover:text-pm-lime transition-colors"
                   onClick={() => setIsOpen(false)}
                 >
                   {item}
-                </a>
+                </motion.a>
               ))}
-              <div className="flex flex-col gap-4 pt-4">
-                <Button className="w-full bg-pm-dark text-white py-6">Inquiry Now</Button>
-                <div className="flex gap-4">
-                  <a href="tel:08047549587" className="flex-1 bg-pm-sand-light text-pm-dark py-3 rounded-xl flex items-center justify-center gap-2 font-semibold">
-                    <Phone className="w-4 h-4" /> Call
-                  </a>
-                  <a href="https://wa.me/918047549587" className="flex-1 bg-pm-lime text-pm-dark py-3 rounded-xl flex items-center justify-center gap-2 font-semibold">
-                    <MessageCircle className="w-4 h-4" /> WhatsApp
-                  </a>
-                </div>
+            </div>
+
+            <div className="p-6 border-t border-pm-dark/5 bg-pm-dark/5 flex flex-col gap-4">
+              <Button className="w-full h-14 bg-pm-dark text-white rounded-2xl text-lg font-bold">Request Priority Quote</Button>
+              <div className="flex gap-4">
+                <a href="tel:08047549587" className="flex-1 h-14 bg-white border border-pm-dark/10 rounded-2xl flex items-center justify-center gap-2 font-bold text-pm-dark">
+                  <Phone className="w-5 h-5 text-pm-lime" /> Call
+                </a>
+                <a href="https://wa.me/918047549587" className="flex-1 h-14 bg-pm-lime text-pm-dark rounded-2xl flex items-center justify-center gap-2 font-bold">
+                  <MessageCircle className="w-5 h-5" /> WhatsApp
+                </a>
               </div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </nav>
+    </>
   );
 };
 
@@ -176,12 +200,12 @@ const Hero = () => {
           transition={{ duration: 0.8, ease: EASE_EXPO }}
           className="max-w-3xl"
         >
-          <h1 className="font-heading text-6xl md:text-8xl font-black text-pm-dark leading-[0.95] mb-8 tracking-tighter">
+          <h1 className="font-heading text-4xl sm:text-6xl md:text-8xl font-black text-pm-dark leading-[0.95] mb-6 md:mb-8 tracking-tighter">
             Precision Block <br />
             <span className="text-gradient-green">Making Machinery.</span>
           </h1>
 
-          <p className="font-body text-xl text-pm-fg-muted max-w-xl leading-relaxed mb-12">
+          <p className="font-body text-lg md:text-xl text-pm-fg-muted max-w-xl leading-relaxed mb-10 md:mb-12">
             Engineered for high-performance durability and maximum output. We manufacture & export world-class automated construction machinery globally.
           </p>
 
@@ -248,9 +272,9 @@ const Hero = () => {
 
 const TrustBar = () => {
   return (
-    <div className="bg-white border-y border-pm-dark/5 py-12 relative overflow-hidden">
+    <div className="bg-white border-y border-pm-dark/5 py-8 md:py-12 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="flex flex-wrap justify-center md:justify-between items-center gap-12 text-pm-dark/30">
+        <div className="flex flex-wrap justify-center md:justify-between items-center gap-8 md:gap-12 text-pm-dark/30">
           <div className="flex items-center gap-3 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all cursor-default">
             <ShieldCheck className="w-12 h-12" />
             <div className="flex flex-col uppercase">
@@ -285,8 +309,8 @@ const TrustBar = () => {
 
 const About = () => {
   return (
-    <section id="about" className="py-32 relative overflow-hidden bg-canvas-soft">
-       <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+    <section id="about" className="py-20 md:py-32 relative overflow-hidden bg-canvas-soft">
+       <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-20 items-center">
           <motion.div 
             initial="hidden"
             whileInView="visible"
@@ -317,7 +341,7 @@ const About = () => {
             variants={fadeInUp}
           >
              <span className="text-pm-lime font-black tracking-[0.3em] uppercase text-xs mb-4 block">Our Engineering DNA</span>
-             <h2 className="text-5xl font-black text-pm-dark mb-8 leading-tight">We Build Machines that <span className="text-pm-lime">Build Cities.</span></h2>
+             <h2 className="text-4xl md:text-5xl font-black text-pm-dark mb-6 md:mb-8 leading-tight">We Build Machines that <span className="text-pm-lime">Build Cities.</span></h2>
              
              <p className="text-lg text-pm-fg-muted leading-relaxed mb-10">
                 Possible Machines Private Limited is a premier manufacturer and exporter specializing in high-performance block making systems. Based in Nashik, we bridge the gap between traditional reliability and modern automation.
@@ -364,13 +388,13 @@ const ProductShowcase = () => {
   }, [activeTab, activeAutomation]);
 
   return (
-    <section id="machines" className="py-32 section-gradient">
+    <section id="machines" className="py-20 md:py-32 section-gradient">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12 md:mb-16">
           <div className="max-w-xl">
             <span className="text-pm-lime font-black tracking-[0.3em] uppercase text-xs mb-4 block">Catalog 2024</span>
-            <h2 className="text-5xl font-black text-pm-dark mb-4">Precision Machines.</h2>
-            <p className="text-pm-fg-muted">Choose your high-output solution based on automation and capacity requirements.</p>
+            <h2 className="text-4xl md:text-5xl font-black text-pm-dark mb-4">Precision Machines.</h2>
+            <p className="text-pm-fg-muted text-sm md:text-base">Choose your high-output solution based on automation and capacity requirements.</p>
           </div>
           
           <div className="flex flex-col gap-4">
@@ -390,12 +414,12 @@ const ProductShowcase = () => {
         </div>
 
         {/* Category Tabs */}
-        <div className="flex flex-wrap gap-3 mb-12">
+        <div className="flex overflow-x-auto pb-4 mb-8 md:mb-12 no-scrollbar -mx-6 px-6 gap-3">
           {categories.map(c => (
             <button
               key={c.id}
               onClick={() => setActiveTab(c.id)}
-              className={`px-6 py-3 rounded-2xl text-sm font-bold border-2 transition-all ${activeTab === c.id ? "filter-tab-active border-pm-lime" : "bg-white border-pm-dark/5 text-pm-dark/60 hover:border-pm-dark/20"}`}
+              className={`px-6 py-3 rounded-2xl text-sm font-bold border-2 transition-all whitespace-nowrap ${activeTab === c.id ? "filter-tab-active border-pm-lime" : "bg-white border-pm-dark/5 text-pm-dark/60 hover:border-pm-dark/20"}`}
             >
               {c.label}
             </button>
@@ -470,7 +494,7 @@ const ProductShowcase = () => {
 
 const WhyChooseUs = () => {
   return (
-    <section className="py-32 bg-pm-dark relative overflow-hidden">
+    <section className="py-20 md:py-32 bg-pm-dark relative overflow-hidden">
        {/* Background graphic */}
        <div className="absolute top-0 right-0 w-1/2 h-full opacity-10 pointer-events-none">
           <svg viewBox="0 0 500 500" className="w-full h-full">
@@ -480,10 +504,10 @@ const WhyChooseUs = () => {
        </div>
 
        <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <div className="text-center max-w-3xl mx-auto mb-20">
+          <div className="text-center max-w-3xl mx-auto mb-16 md:mb-20">
              <span className="text-pm-lime font-black tracking-[0.3em] uppercase text-xs mb-4 block">Core Values</span>
-             <h2 className="text-5xl font-black text-white mb-6">Built for <span className="text-pm-lime">Extreme Performance.</span></h2>
-             <p className="text-white/60">Our focus is on durability, throughput, and lowering the operational cost for your factory lines.</p>
+             <h2 className="text-4xl md:text-5xl font-black text-white mb-6 md:mb-8 tracking-tight">Built for <span className="text-pm-lime">Extreme Performance.</span></h2>
+             <p className="text-white/60 text-sm md:text-base">Our focus is on durability, throughput, and lowering the operational cost for your factory lines.</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -542,10 +566,10 @@ const VideoSection = () => {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.7, ease: EASE_EXPO }}
           >
             <span className="text-pm-lime font-black tracking-[0.3em] uppercase text-xs mb-4 block">Machine Demo</span>
-            <h2 className="text-5xl font-black text-pm-dark mb-16">
+            <h2 className="text-4xl md:text-5xl font-black text-pm-dark mb-12 md:mb-16">
               See the <span className="text-pm-lime">Intensity.</span>
             </h2>
           </motion.div>
@@ -554,7 +578,7 @@ const VideoSection = () => {
             initial={{ opacity: 0, scale: 0.97 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.8, delay: 0.1, ease: EASE_EXPO }}
             className="relative max-w-5xl mx-auto rounded-[40px] overflow-hidden shadow-2xl shadow-pm-dark/20 border-[12px] border-white cursor-pointer"
             onClick={handlePlay}
           >
@@ -680,15 +704,15 @@ const Testimonials = () => {
 
 const ContactForm = () => {
   return (
-    <section id="contact" className="py-32 relative overflow-hidden">
+    <section id="contact" className="py-20 md:py-32 relative overflow-hidden">
        <div className="absolute inset-0 z-0 bg-gradient-to-b from-transparent via-white to-transparent opacity-50" />
 
 
        <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
              <div>
                 <span className="text-pm-lime font-black tracking-[0.3em] uppercase text-xs mb-4 block">Get Quotation</span>
-                <h2 className="text-6xl font-black text-pm-dark mb-8 leading-none">Ready to <span className="text-pm-lime">Automate?</span></h2>
+                <h2 className="text-4xl md:text-6xl font-black text-pm-dark mb-6 md:mb-8 leading-none">Ready to <span className="text-pm-lime">Automate?</span></h2>
                 <p className="text-lg text-pm-fg-muted max-w-md mb-12">
                    Fill out the form below or contact us via WhatsApp for a priority quote within 24 hours.
                 </p>
@@ -746,7 +770,7 @@ const ContactForm = () => {
 
 const Footer = () => {
   return (
-    <footer className="bg-pm-dark pt-32 pb-12 relative overflow-hidden">
+    <footer className="bg-pm-dark pt-20 md:pt-32 pb-12 relative overflow-hidden">
        {/* Background accent */}
        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-pm-lime/5 blur-[120px] rounded-full" />
        
