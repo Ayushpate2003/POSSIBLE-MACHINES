@@ -240,22 +240,22 @@ const Hero = () => {
           </div>
         </motion.div>
 
-        {/* New Industrial Render in the "Blank Space" */}
+        {/* Industrial Render - Now visible on all devices with responsive order */}
         <motion.div
           initial={{ opacity: 0, scale: 0.8, x: 50 }}
           animate={{ opacity: 1, scale: 1, x: 0 }}
           transition={{ duration: 1, delay: 0.2, ease: EASE_EXPO }}
-          className="relative hidden lg:block"
+          className="relative block mt-12 lg:mt-0"
         >
           <div className="relative z-10 animate-blob-1">
              <img 
                src="/hero-industrial.png" 
                alt="Industrial Plant" 
-               className="w-full h-auto drop-shadow-[0_35px_60px_rgba(26,61,47,0.3)] transition-transform hover:scale-105 duration-700"
+               className="w-full h-auto drop-shadow-[0_20px_40px_rgba(26,61,47,0.2)] md:drop-shadow-[0_35px_60px_rgba(26,61,47,0.3)] transition-transform hover:scale-105 duration-700"
              />
           </div>
           {/* Decorative halo */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-pm-lime/10 blur-[100px] rounded-full -z-10" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-pm-lime/10 blur-[60px] md:blur-[100px] rounded-full -z-10" />
         </motion.div>
       </div>
 
