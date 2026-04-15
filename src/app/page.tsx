@@ -177,7 +177,7 @@ const Hero = () => {
   const opacity = useTransform(scrollY, [0, 400], [1, 0]);
 
   return (
-    <section id="home" className="relative h-screen min-h-[800px] flex items-center overflow-hidden">
+    <section id="home" className="relative min-h-screen flex items-center overflow-hidden py-24 md:py-0">
       {/* Background with 3D-like industrial render placeholder */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-r from-white via-white/80 to-transparent z-10" />
@@ -209,17 +209,34 @@ const Hero = () => {
             Engineered for high-performance durability and maximum output. We manufacture & export world-class automated construction machinery globally.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Button className="h-16 px-10 bg-pm-dark text-white text-lg font-bold rounded-2xl group shadow-2xl shadow-pm-dark/20 hover:bg-pm-mid transition-all">
+          <div className="flex flex-col sm:flex-row gap-4 mb-12 lg:mb-0">
+            <Button className="h-14 md:h-16 px-10 bg-pm-dark text-white text-base md:text-lg font-bold rounded-2xl group shadow-lg md:shadow-2xl shadow-pm-dark/20 hover:bg-pm-mid transition-all">
               Get Instant Quote
               <ArrowUpRight className="ml-2 w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
             </Button>
             <Button
               variant="secondary"
-              className="h-16 px-10 border-2 border-pm-dark/10 text-pm-dark text-lg font-bold rounded-2xl bg-white/50 backdrop-blur-sm hover:bg-white transition-all shadow-xl"
+              className="h-14 md:h-16 px-10 border-2 border-pm-dark/10 text-pm-dark text-base md:text-lg font-bold rounded-2xl bg-white/50 backdrop-blur-sm hover:bg-white transition-all shadow-md md:shadow-xl"
             >
               Explore Products
             </Button>
+          </div>
+
+          {/* Mobile Metrics Dashboard */}
+          <div className="md:hidden">
+            <div className="grid grid-cols-2 gap-4">
+              {[
+                { label: "ISO CERTIFIED", value: "9001:2015" },
+                { label: "GLOBAL EXPORT", value: "15+ Countries" },
+                { label: "TEAM STRENGTH", value: "50+ Experts" },
+                { label: "BATTLE TESTED", value: "12+ Years" },
+              ].map((metric) => (
+                <div key={metric.label} className="bg-white/40 backdrop-blur-md border border-white/20 p-5 rounded-2xl">
+                  <span className="text-[8px] font-black tracking-widest text-pm-dark/40 uppercase mb-1 block">{metric.label}</span>
+                  <span className="text-lg font-heading font-black text-pm-dark leading-none">{metric.value}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </motion.div>
 
@@ -242,8 +259,8 @@ const Hero = () => {
         </motion.div>
       </div>
 
-      {/* Trust metric summary absolute bottom left */}
-      <div className="absolute bottom-12 right-0 left-0">
+      {/* Desktop Trust metric summary - hidden on mobile to prevent overlap */}
+      <div className="absolute bottom-12 right-0 left-0 hidden md:block">
         <div className="max-w-7xl mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
