@@ -349,14 +349,14 @@ const About = () => {
 
              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">
                 {[
-                  { icon: <History />, title: "Trusted Since 2012", desc: "A decade of legacy." },
-                  { icon: <Settings />, title: "Precision Design", desc: "Bespoke engineering." },
-                  { icon: <Globe />, title: "Global Export", value: "Pan-India & Abroad." },
-                  { icon: <ShieldCheck />, title: "ISO Certified", desc: "9001:2015 Approved." },
+                  { icon: History, title: "Trusted Since 2012", desc: "A decade of legacy." },
+                  { icon: Settings, title: "Precision Design", desc: "Bespoke engineering." },
+                  { icon: Globe, title: "Global Export", value: "Pan-India & Abroad." },
+                  { icon: ShieldCheck, title: "ISO Certified", desc: "9001:2015 Approved." },
                 ].map((item, i) => (
                   <div key={i} className="flex items-start gap-4 group">
                      <div className="w-12 h-12 rounded-xl bg-pm-lime/10 text-pm-lime flex items-center justify-center transition-colors group-hover:bg-pm-lime group-hover:text-pm-dark">
-                        {React.cloneElement(item.icon as React.ReactElement, { size: 24 })}
+                        <item.icon size={24} />
                      </div>
                      <div>
                         <h4 className="font-bold text-pm-dark text-sm mb-1">{item.title}</h4>
@@ -512,14 +512,14 @@ const WhyChooseUs = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
              {[
-               { icon: <ShieldCheck />, title: "High Durability", desc: "Constructed with heavy-duty MS steel plates for 24/7 industrial loads." },
-               { icon: <Zap />, title: "Low Maintenance", desc: "Minimal moving parts and simplified hydraulic access for self-service." },
-               { icon: <Settings />, title: "Automation Ready", desc: "Intelligent PLC handling for consistency without human error." },
-               { icon: <Truck />, title: "Pan-India Support", desc: "On-site installation and pan-India maintenance network." },
+               { icon: ShieldCheck, title: "High Durability", desc: "Constructed with heavy-duty MS steel plates for 24/7 industrial loads." },
+               { icon: Zap, title: "Low Maintenance", desc: "Minimal moving parts and simplified hydraulic access for self-service." },
+               { icon: Settings, title: "Automation Ready", desc: "Intelligent PLC handling for consistency without human error." },
+               { icon: Truck, title: "Pan-India Support", desc: "On-site installation and pan-India maintenance network." },
              ].map((feature, i) => (
                 <div key={i} className="glass-dark p-8 rounded-[40px] hover:border-pm-lime/40 transition-colors group">
                    <div className="w-16 h-16 rounded-2xl bg-pm-lime/10 text-pm-lime flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                      {React.cloneElement(feature.icon as React.ReactElement, { size: 32 })}
+                      <feature.icon size={32} />
                    </div>
                    <h4 className="text-xl font-heading font-black text-white mb-3">{feature.title}</h4>
                    <p className="text-sm text-white/50 leading-relaxed">{feature.desc}</p>
