@@ -1,26 +1,196 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --font-heading: "Poppins", system-ui, sans-serif;
+  --font-body:    "Inter", system-ui, sans-serif;
+  --font-mono:    "JetBrains Mono", monospace;
+
+  /* ── Brand Palette ──────────────────────────────── */
+  --color-pm-dark:        #1A3D2F;   /* Primary dark green */
+  --color-pm-mid:         #2D5A45;   /* Mid green */
+  --color-pm-lime:        #7ED957;   /* Accent lime */
+  --color-pm-lime-dark:   #5DBF3A;   /* Pressed lime */
+  --color-pm-lime-glow:   rgba(126, 217, 87, 0.25);
+  --color-pm-sand:        #C4A882;   /* Logo hand warm */
+  --color-pm-sand-light:  #F5EFE6;
+
+  /* Canvas */
+  --color-canvas:         #FFFFFF;
+  --color-canvas-soft:    #F6FBF4;   /* Very light green tint */
+  --color-canvas-mid:     #EDF6E9;
+
+  /* Foreground */
+  --color-fg-primary:     #0D1F18;
+  --color-fg-muted:       #4B6358;
+  --color-fg-subtle:      #8FA89A;
+
+  /* Borders */
+  --color-border:         rgba(26, 61, 47, 0.10);
+  --color-border-strong:  rgba(26, 61, 47, 0.20);
+
+  /* Shadows */
+  --shadow-card:    0 0 0 1px rgba(26,61,47,0.05), 0 4px 24px rgba(26,61,47,0.06);
+  --shadow-hover:   0 0 0 1px rgba(126,217,87,0.20), 0 12px 48px rgba(26,61,47,0.12);
+  --shadow-green:   0 0 0 1px rgba(126,217,87,0.40), 0 4px 16px rgba(126,217,87,0.30);
+
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Re-map tokens for Shadcn components */
+  --color-accent:         var(--color-pm-lime);
+  --color-accent-bright:  var(--color-pm-lime-dark);
+  --color-accent-glow:    var(--color-pm-lime-glow);
+  --color-border-subtle:  var(--color-border);
+  --color-border-hover:   var(--color-border-strong);
+  --color-border-accent:  rgba(126,217,87,0.35);
+  --shadow-linear-card:   var(--shadow-card);
+  --shadow-linear-hover:  var(--shadow-hover);
+  --shadow-accent-glow:   var(--shadow-green);
+  --color-fg-primary:     #0D1F18;
+  --color-fg-muted:       #4B6358;
+  --color-canvas-base:    #FFFFFF;
+  --color-canvas-elevated:#FFFFFF;
+  --ease-expo:            cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* ── Base ──────────────────────────────────────────── */
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--color-canvas);
+    color: var(--color-fg-primary);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ── Global Section Gradient ─────────────────────────────── */
+.section-gradient {
+  background: linear-gradient(180deg, #ffffff 0%, #f6fbf4 50%, #edf6e9 100%);
+}
+
+.bg-canvas-soft {
+  background-color: #F6FBF4;
+}
+
+.section-dark {
+  background: linear-gradient(135deg, #1A3D2F 0%, #2D5A45 100%);
+}
+
+/* ── Keyframes ───────────────────────────────────────────── */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-18px); }
+}
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(14px); }
+}
+@keyframes gradient-shift {
+  0%   { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
+@keyframes pulse-ring {
+  0%   { transform: scale(1); opacity: 0.7; }
+  100% { transform: scale(1.8); opacity: 0; }
+}
+@keyframes ticker-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+@keyframes count-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Utility Classes ────────────────────────────────────── */
+.animate-blob-1 { animation: float 10s ease-in-out infinite; }
+.animate-blob-2 { animation: float-slow 13s ease-in-out infinite; }
+.animate-blob-3 { animation: float 16s ease-in-out infinite; animation-delay: -4s; }
+.animate-ticker { animation: ticker-scroll 30s linear infinite; }
+.animate-gradient { animation: gradient-shift 4s linear infinite; }
+.animate-count   { animation: count-up 0.6s var(--ease-expo) forwards; }
+
+.text-gradient-green {
+  background: linear-gradient(135deg, #7ED957 0%, #5DBF3A 50%, #7ED957 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-shift 4s linear infinite;
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(26, 61, 47, 0.08);
+  box-shadow: var(--shadow-card);
+}
+
+.glass-dark {
+  background: rgba(26, 61, 47, 0.85);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(126, 217, 87, 0.15);
+}
+
+/* Shimmer on hover */
+.shimmer-hover {
+  position: relative;
+  overflow: hidden;
+}
+.shimmer-hover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.3) 50%, transparent 60%);
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+.shimmer-hover:hover::after { transform: translateX(100%); }
+
+/* WhatsApp float */
+.whatsapp-float {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 999;
+}
+.whatsapp-float .ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: rgba(37, 211, 102, 0.4);
+  animation: pulse-ring 2s ease-out infinite;
+}
+
+/* Shadcn compat */
+:root {
+  --background: var(--color-canvas);
+  --foreground: var(--color-fg-primary);
+  --primary: var(--color-pm-lime);
+  --primary-foreground: #ffffff;
+  --muted-foreground: var(--color-fg-muted);
+  --border: var(--color-border);
+  --card: #ffffff;
+  --card-foreground: var(--color-fg-primary);
+  --accent: rgba(126,217,87,0.08);
+}
+
+/* ── Filters Tab Active ──────────────────────────── */
+.filter-tab-active {
+  background: var(--color-pm-lime);
+  color: #0D1F18;
+  font-weight: 600;
+  box-shadow: 0 2px 12px rgba(126,217,87,0.4);
 }
