@@ -52,10 +52,6 @@ export default function GlobalNetwork() {
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="order-2 lg:order-1">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pm-lime/10 border border-pm-lime/20 text-pm-lime text-[10px] font-black tracking-widest uppercase mb-6">
-              <Globe className="w-3 h-3" /> Worldwide Operations
-            </div>
-            
             <h2 className="text-4xl md:text-6xl font-black text-white mb-6 md:mb-8 leading-[0.95] tracking-tighter">
               Powering Global <br />
               <span className="text-pm-lime">Infrastructure.</span>
